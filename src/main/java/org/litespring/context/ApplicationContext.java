@@ -1,6 +1,8 @@
 package org.litespring.context;
 
-public interface ApplicationContext {
+import org.litespring.beans.factory.config.ConfigurableBeanFactory;
+
+public interface ApplicationContext extends ConfigurableBeanFactory{
 
 	Object getBean(String beanId);
 
