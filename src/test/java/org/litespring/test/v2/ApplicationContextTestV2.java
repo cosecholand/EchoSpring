@@ -17,5 +17,6 @@ public class ApplicationContextTestV2 {
 		assertNotNull(petStore.getAccountDao());
 		assertNotNull(petStore.getItemDao());
 		assertEquals("w3cjava", petStore.getOwner());
+		assertEquals(2, petStore.getVersion());
 	}
 }
