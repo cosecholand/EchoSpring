@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.litespring.beans.BeanDefinition;
 import org.litespring.beans.factory.BeanFactory;
 import org.litespring.beans.factory.support.DefaultBeanFactory;
-import org.litespring.test.service.v1.PetStoreService;
+import org.litespring.service.v1.PetStoreService;
 
 public class BeanFactoryTest {
 	@Test
