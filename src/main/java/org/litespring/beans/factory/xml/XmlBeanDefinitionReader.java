@@ -12,6 +12,7 @@ import org.litespring.beans.BeanDefinition;
 import org.litespring.beans.factory.BeanDefinitionStoreException;
 import org.litespring.beans.factory.support.BeanDefinitionRegistry;
 import org.litespring.beans.factory.support.GenericBeanDefinition;
+import org.litespring.core.io.Resource;
 import org.litespring.utils.ClassUtils;
 
 public class XmlBeanDefinitionReader {
@@ -31,25 +32,24 @@ public class XmlBeanDefinitionReader {
 	 * 加载并解析xml文件
 	 * @param confFile
 	 */
-	public void loadBeanDefinitions(String confFile) {
+	public void loadBeanDefinitions(Resource resource) {
 		InputStream is = null;
 		try {
-		ClassLoader classLoader = ClassUtils.getDefaultClassLoader();
-		is = classLoader.getResourceAsStream(confFile);
-		SAXReader reader = new SAXReader();
-		Document doc = reader.read(is);
+			is = resource.getInputStream();
+			SAXReader reader = new SAXReader();
+			Document doc = reader.read(is);
+			
+			Element element = doc.getRootElement();
+			Iterator iter = element.elementIterator();
+			while(iter.hasNext()){
+				Element ele = (Element)iter.next();
+				String id = ele.attributeValue(ID_ATTRIBUTE);
+				String beanClassName = ele.attributeValue(CLASS_ATTRIBUTE);
+				BeanDefinition bd = new GenericBeanDefinition(id,beanClassName);
+				this.registry.registerBeanDefinition(id, bd);
+			}
 		
-		Element element = doc.getRootElement();
-		Iterator iter = element.elementIterator();
-		while(iter.hasNext()){
-			Element ele = (Element)iter.next();
-			String id = ele.attributeValue(ID_ATTRIBUTE);
-			String beanClassName = ele.attributeValue(CLASS_ATTRIBUTE);
-			BeanDefinition bd = new GenericBeanDefinition(id,beanClassName);
-			this.registry.registerBeanDefinition(id, bd);
-		}
-		
-		} catch (DocumentException e) {
+		} catch (Exception e) {
 			throw new BeanDefinitionStoreException("IOException parsing XML document",e);
 		}finally{
 			if(is!=null){
