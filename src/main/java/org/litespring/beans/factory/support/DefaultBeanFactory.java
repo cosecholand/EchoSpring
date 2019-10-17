@@ -11,6 +11,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.litespring.beans.BeanDefinition;
+import org.litespring.beans.factory.BeanCreationException;
+import org.litespring.beans.factory.BeanDefinitionStoreException;
 import org.litespring.beans.factory.BeanFactory;
 import org.litespring.utils.ClassUtils;
 
@@ -45,7 +47,7 @@ public class DefaultBeanFactory implements BeanFactory {
 		}
 		
 		} catch (DocumentException e) {
-			e.printStackTrace();
+			throw new BeanDefinitionStoreException("IOException parsing XML document",e);
 		}finally{
 			if(is!=null){
 				try {
@@ -68,17 +70,12 @@ public class DefaultBeanFactory implements BeanFactory {
 		}
 		ClassLoader classLoader = ClassUtils.getDefaultClassLoader();
 		String beanClassName = bd.getBeanClassName();
-			try {
-				Class<?> clz = classLoader.loadClass(beanClassName);
-				return clz.newInstance();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			return null;
+		try {
+			Class<?> clz = classLoader.loadClass(beanClassName);
+			return clz.newInstance();
+		} catch (Exception e) {
+			throw new BeanCreationException("Create Bean for "+beanClassName+" faild,",e);
+		}
 	}
 
 }
