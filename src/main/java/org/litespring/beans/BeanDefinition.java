@@ -1,5 +1,7 @@
 package org.litespring.beans;
 
+import java.util.List;
+
 public interface BeanDefinition {
 
 	String getBeanClassName();
@@ -11,5 +13,6 @@ public interface BeanDefinition {
 	public boolean isPrototype();
 	String getScope();
 	void setScope(String scope);
+	public List<PropertyValue> getPropertyValues();
 
 }
