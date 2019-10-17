@@ -1,5 +1,6 @@
 package org.litespring.test.v2;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
@@ -15,6 +16,6 @@ public class ApplicationContextTestV2 {
 		
 		assertNotNull(petStore.getAccountDao());
 		assertNotNull(petStore.getItemDao());
-		
+		assertEquals("w3cjava", petStore.getOwner());
 	}
 }
